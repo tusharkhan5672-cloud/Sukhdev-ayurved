@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | Sukhdev Ayurvedic</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Sticky Navbar (Integrated exactly as requested) -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <!-- Mobile Menu Toggle (Visible only on mobile) -->
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Navigation Links (Left Side on Desktop) -->
+            <nav class="nav-links" id="nav-links">
+                <a href="index.html" class="nav-link">Shop <span class="nav-arrow">▼</span></a>
+                <a href="#collections" class="nav-link">Collections <span class="nav-arrow">▼</span></a>
+                <a href="#pages" class="nav-link">Pages <span class="nav-arrow">▼</span></a>
+                <a href="#features" class="nav-link">Features <span class="nav-arrow">▼</span></a>
+            </nav>
+
+            <!-- Brand Logo (Center on Desktop) -->
+            <a href="/index.html" class="brand-logo-wrapper">
+                <img src="/image/black logo.png" alt="Ayurvedic Tea Logo" class="logo" >
+            </a>
+
+            <!-- Right Actions (Search, Account, Cart) -->
+            <div class="nav-actions">
+                <span class="search-text">What are you looking for?</span>
+                <button class="icon-btn" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <!-- User Profile Icon -->
+                <button class="icon-btn" aria-label="Account">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Cart">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-badge">1</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="sukhdev-main">
+        
+        <!-- Split Hero Section -->
+        <section class="shop-hero">
+            <div class="shop-hero-split left-bg">
+                <img src="https://images.unsplash.com/photo-1596344084757-b83f2081da8b?q=80&w=1285&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Herbal Tea">
+            </div>
+            <div class="shop-hero-split right-bg">
+                <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Star Anise and Cinnamon">
+            </div>
+            <div class="shop-hero-overlay"></div>
+            
+            <div class="shop-hero-content">
+                <p class="sd-subtitle text-light">NATURE'S PURITY IN EVERY SIP</p>
+                <h1 class="sd-main-title text-light">Whole Body<br>Health starts in<br>the guts</h1>
+                <a href="#products-area" class="sd-btn-outline btn-light">SHOP ALL &mdash;</a>
+            </div>
+        </section>
+
+        <!-- Shop Main Area (Filters + Grid) -->
+        <section id="products-area" class="shop-container">
+            <aside class="shop-sidebar">
+                <h3 class="filter-heading">Categories</h3>
+                <ul class="filter-list">
+                    <li><a href="#" class="active">All Teas</a></li>
+                    <li><a href="#">Vata Balancing</a></li>
+                    <li><a href="#">Pitta Balancing</a></li>
+                    <li><a href="#">Kapha Balancing</a></li>
+                    <li><a href="#">Accessories</a></li>
+                </ul>
+
+                <h3 class="filter-heading">Price</h3>
+                <ul class="filter-list">
+                    <li><label><input type="checkbox"> Under ₹ 599/-</label></li>
+                    <li><label><input type="checkbox"> ₹ 199/- - ₹ 399/-</label></li>
+                    <li><label><input type="checkbox"> Over ₹ 399/-</label></li>
+                </ul>
+            </aside>
+
+            <div class="shop-content">
+                <div class="shop-toolbar">
+                    <p class="product-count">Showing 1 of 1 results</p>
+                    <select class="sort-dropdown">
+                        <option>Sort by: Featured</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>New Arrivals</option>
+                    </select>
+                </div>
+
+                <div class="sd-product-grid">
+                    <div class="sd-product-card">
+                        <!-- Wrap the image in an anchor tag -->
+                        <a href="/product/product.html">
+                            <img src="/image/product2.png" alt="Product">
+                        </a>
+                        
+                        <h3>Herbal Wellness Tea</h3>
+                        <p class="sd-cat">Refreshing • Relaxing • Antioxidant</p>
+                        <p class="sd-price">₹ 399/-</p>
+                        <button class="sd-btn-cart">ADD TO CART</button>
+                    </div>
+
+                    <!--- 
+
+                    <div class="sd-product-card">
+                        <span class="sd-sale-badge">SALE</span>
+                        <img src="https://images.unsplash.com/photo-1576092762791-dd9e2220abd4?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                        <h3>Tulsi Radiance</h3>
+                        <p class="sd-cat">Immunity</p>
+                        <p class="sd-price"><strike>$28.00</strike> $22.50</p>
+                        <button class="sd-btn-cart">ADD TO CART</button>
+                    </div>
+                    <div class="sd-product-card">
+                        <img src="https://images.unsplash.com/photo-1596328639257-22f28120e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                        <h3>Turmeric Detox</h3>
+                        <p class="sd-cat">Kapha Balancing</p>
+                        <p class="sd-price">$26.00</p>
+                        <button class="sd-btn-cart">ADD TO CART</button>
+                    </div>
+                    <div class="sd-product-card">
+                        <img src="https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                        <h3>Brahmi Focus</h3>
+                        <p class="sd-cat">Mind Clarity</p>
+                        <p class="sd-price">$25.00</p>
+                        <button class="sd-btn-cart">ADD TO CART</button>
+                    </div>
+                    <div class="sd-product-card">
+                        <img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                        <h3>Copper Tumbler</h3>
+                        <p class="sd-cat">Accessories</p>
+                        <p class="sd-price">$35.00</p>
+                        <button class="sd-btn-cart">ADD TO CART</button>
+                    </div>
+                    <div class="sd-product-card">
+                        <img src="https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                        <h3>Neem Purify</h3>
+                        <p class="sd-cat">Pitta Balancing</p>
+                        <p class="sd-price">$21.00</p>
+                        <button class="sd-btn-cart">ADD TO CART</button>
+                    </div> 
+
+                    -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Area -->
+        <footer class="sd-footer">
+            <div class="sd-footer-bottom">
+                <p>&copy; 2026 Sukhdev. All rights reserved.</p>
+                <p class="sd-credit">Designed by <strong>TUSDIO.</strong></p>
+            </div>
+        </footer>
+
+    </main>
+    <script src="/cart-system.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
