@@ -65,8 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add to clicked
             tab.classList.add('active');
             
-            // Note: In a real app, this would filter the products.
-            // For now, it just resets the scroll position to simulate change.
+
             if(slider) {
                 slider.scrollTo({ left: 0, behavior: 'smooth' });
             }
