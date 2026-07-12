@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sukhdev | Premium Ayurvedic Tea</title>
+    
+    <!-- Google Fonts for Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <!-- Mobile Menu Toggle (Visible only on mobile) -->
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Navigation Links (Left Side on Desktop) -->
+            <nav class="nav-links" id="nav-links">
+                <a href="navbar/shop/index.html" class="nav-link">Shop <span class="nav-arrow">▼</span></a>
+                <a href="#collections" class="nav-link">Collections <span class="nav-arrow">▼</span></a>
+                <a href="#pages" class="nav-link">Pages <span class="nav-arrow">▼</span></a>
+                <a href="#features" class="nav-link">Features <span class="nav-arrow">▼</span></a>
+            </nav>
+
+            <!-- Brand Logo (Center on Desktop) -->
+            <a href="#" class="brand-logo-wrapper">
+                <img src="image/black logo.png" alt="Ayurvedic Tea Logo" class="logo">
+            </a>
+
+            <!-- Right Actions (Search, Account, Cart) -->
+            <div class="nav-actions">
+                <span class="search-text">What are you looking for?</span>
+                <button class="icon-btn" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <!-- User Profile Icon -->
+                <button class="icon-btn" aria-label="Account">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Cart">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-badge">1</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         NEW MAIN LAYOUT (From Screenshot)
+         ========================================== -->
+    <main class="sukhdev-main">
+        
+<!-- Hero Section -->
+<section class="sd-hero">
+    
+    <!-- Left Background (Solid color with hand/product image) -->
+    <div class="hero-split hero-left">
+        <img src="image/elena-leya-O7sKj9cjZOk-unsplash.jpg" alt="Hand holding product" class="hero-img-left">
+    </div>
+    
+    <!-- Right Background (Texture/Leaf image) -->
+    <div class="hero-split hero-right">
+        <img src="image/joanna-stolowicz-QdX9Ds-WrCQ-unsplash.jpg" alt="Green leaf texture" class="hero-img-right">
+        <div class="hero-overlay-dark"></div>
+    </div>
+
+    <!-- The original corner leaves (Optional: remove these if the new background is too busy) -->
+    <div class="sd-leaf left-leaf"></div>
+    <div class="sd-leaf right-leaf"></div>
+    
+    <!-- Centered Content -->
+    <div class="sd-hero-content">
+        <!-- Text needs to be white/light to show up on the images -->
+        <p class="sd-subtitle text-light">Nature’s Purity in Every Sip</p>
+        <h1 class="sd-main-title text-light">Whole Body<br>Health starts in<br>the guts</h1>
+        <a href="#shop" class="sd-btn-outline btn-light">SHOP ALL &mdash;</a>
+    </div>
+</section>
+
+        <!-- Feature Split Section -->
+        <section class="sd-feature-split">
+            <div class="sd-feature-left">
+                <p class="sd-subtitle">NEW ARRIVALS</p>
+                <h2 class="sd-section-title">Premium Herbal Wellness<br>Tea Blends</h2>
+                <p class="sd-description">    Discover handcrafted herbal wellness teas made with carefully selected botanicals for a naturally healthier way to unwind.</p>
+                <p class="sd-price-text">FROM ₹ 399/-</p>
+                <a href="#shop" class="sd-btn-outline">SHOP ALL &mdash;</a>
+                
+
+            </div>
+            
+            <div class="sd-feature-right">
+                <img src="https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Pouring Tea">
+            </div>
+            
+            <!-- Background Watermark Text -->
+            <div class="sd-watermark">SUKHDEV</div>
+        </section>
+
+        <!-- Bestsellers Section -->
+<!-- Bestsellers Section -->
+<section class="sd-bestsellers">
+    <div class="sd-header-center">
+        
+        <!-- Added Logo Here -->
+        <div class="bestseller_logo">
+            <img src="image/black logo.png" alt="Sukhdev Logo">
+        </div>
+        
+        <h2 class="sd-section-title">Shop Our Bestsellers</h2>
+        <p class="sd-description-sm">We measure everything against a rigorous set of criteria to ensure quality.</p>
+    </div>
+    
+    <!-- Rest of your product grid below... -->
+            
+            <div class="sd-product-grid">
+                <!-- Product 1 -->
+                <div class="sd-product-card">
+                    <img src="image/product1.png" alt="Product">
+                    <h3>Herbal Wellness Tea</h3>
+                    <p class="sd-cat">Calming Herbal Infusion | Refreshing • Relaxing • Antioxidant</p>
+                    <p class="sd-price">₹ 399/- </p>
+                    <button class="sd-btn-cart">ADD TO CART</button>
+                </div>
+                <!-- Product 2 
+                <div class="sd-product-card">
+                    <img src="https://images.unsplash.com/photo-1576092762791-dd9e2220abd4?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                    <h3>Practical Aluminum Coat</h3>
+                    <p class="sd-cat">Candles</p>
+                    <p class="sd-price">$230.83</p>
+                    <button class="sd-btn-cart">ADD TO CART</button>
+                </div>
+                 Product 3 
+                <div class="sd-product-card">
+                    <img src="https://images.unsplash.com/photo-1596328639257-22f28120e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                    <h3>Small Silk Watch</h3>
+                    <p class="sd-cat">Diffusers</p>
+                    <p class="sd-price">$701.54</p>
+                    <button class="sd-btn-cart">ADD TO CART</button>
+                </div>
+                 Product 4 
+                <div class="sd-product-card">
+                    <span class="sd-sale-badge">SALE</span>
+                    <img src="https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                    <h3>Durable Cotton Chair</h3>
+                    <p class="sd-cat">Diffusers</p>
+                    <p class="sd-price"><strike>$518.56</strike> $447.00</p>
+                    <button class="sd-btn-cart">ADD TO CART</button>
+                </div>
+                 Product 5 
+                <div class="sd-product-card">
+                    <img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Product">
+                    <h3>Intelligent Linen Clock</h3>
+                    <p class="sd-cat">Diffusers</p>
+                    <p class="sd-price">$612.52</p>
+                    <button class="sd-btn-cart">ADD TO CART</button>
+                </div>
+                -->
+            </div>
+        </section>
+
+        <!-- Promo Cards Section -->
+        <section class="sd-promo-blocks">
+            <div class="sd-promo-card" style="background-image: url('https://plus.unsplash.com/premium_photo-1671718611585-347e3ceee7f2?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+                <div class="sd-promo-overlay">
+                    <p class="sd-subtitle"></p>
+                    <h2 >Coming Soon<br>Hand Soap</h2>
+                    <p>Reimagine your bathing rituals with powerful botanical ingredients.</p>
+                    <a href="#shop" class="sd-btn-solid">START A RITUAL &rarr;</a>
+                </div>
+            </div>
+            <div class="sd-promo-card" style="background-image: url('https://images.unsplash.com/photo-1506003094589-53954a26283f?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+                <div class="sd-promo-overlay">
+                    <p class="sd-subtitle"></p>
+                    <h2>Coming soon<br>Skincare</h2>
+                    <p>Bring the garden inside with our powerful single-note candles.</p>
+                    <a href="#shop" class="sd-btn-solid">START A RITUAL &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+<!-- Footer Area -->
+        <footer class="sd-footer">
+            <div class="sd-footer-bottom">
+                <p>&copy; 2026 Sukhdev. All rights reserved.</p>
+                <p class="sd-credit">Designed by <strong>TUSDIO.</strong></p>
+            </div>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
