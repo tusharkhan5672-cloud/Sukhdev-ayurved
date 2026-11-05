@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7f6f1">
+<title>Admin | Sukhdev</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head><body>
+
+<div class="gate checking" id="gate">
+<form class="gcard" id="lf" novalidate>
+<a href="index.html" class="back">← Back to website</a>
+<div class="mark">SUKHDEV</div>
+<h1>Admin sign in</h1>
+<label for="uid">Email</label><input id="uid" type="email" autocomplete="username">
+<label for="upw">Password</label><input id="upw" type="password" autocomplete="current-password">
+<div class="err" id="lerr" role="alert" aria-live="polite"></div>
+<button type="submit" class="btn" style="width:100%">Sign in</button>
+<button type="button" class="btn ghost" id="gbtn" style="width:100%;margin-top:10px">Continue with Google</button>
+<button type="button" id="fpw" style="display:block;margin:14px auto 0;font-size:.78rem;color:#777;background:none;border:0;cursor:pointer">Forgot password?</button>
+</form>
+</div>
+
+<div class="app hide" id="console">
+<aside class="side">
+<a href="index.html" class="brand">SUKHDEV<small>ADMIN</small></a>
+<nav class="nav" id="nav"></nav>
+<div class="nav foot" id="ft"></div>
+</aside>
+<main class="main">
+<div class="top"><h2 id="ttl"></h2><div class="acts" id="tact"></div></div>
+<div id="content"></div>
+</main>
+</div>
+
+<div class="mb hide" id="mb"><div class="md" id="md"></div></div>
+
+<script>
+/* Safety net: never leave the sign-in form hidden if auth is slow */
+setTimeout(function(){var g=document.getElementById('gate');if(g)g.classList.remove('checking')},2500);
+</script>
+<script src="store.js"></script>
+<script type="module" src="admin.js"></script>
+</body></html>

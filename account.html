@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f6f1">
+  <title>My Account | Sukhdev</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dash.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="side">
+    <a href="index.html" class="brand">
+      <span class="brand-name">SUKHDEV</span>
+      <span class="brand-sub">THE ART OF LIVING WELL</span>
+    </a>
+
+    <div class="side-label">YOUR ACCOUNT</div>
+    <nav class="nav" id="nav"></nav>
+
+    <div class="side-bottom">
+      <div class="help-card">
+        <span class="help-icon" id="helpIcon"></span>
+        <div>
+          <b>Need assistance?</b>
+          <small>We're happy to help.</small>
+        </div>
+        <a id="helpLink" href="mailto:hello@sukhdev.com" aria-label="Contact support">↗</a>
+      </div>
+      <button class="logout" id="out">
+        <span id="logoutIcon"></span>
+        Sign out
+      </button>
+      <div class="side-foot">© SUKHDEV</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div class="top-left">
+        <div class="eyebrow">YOUR PERSONAL SPACE</div>
+        <h2 id="ttl">Overview</h2>
+      </div>
+      <div class="top-actions">
+        <a class="cart-link" href="cart.html">
+          <span id="cartIcon"></span>
+          <span>My cart</span>
+        </a>
+        <div class="top-user">
+          <div class="av" id="av">S</div>
+        </div>
+      </div>
+    </header>
+
+    <div id="view"></div>
+
+    <footer class="main-foot">
+      <span>Thoughtfully made. Made to be yours.</span>
+      <a href="index.html">Continue shopping ↗</a>
+    </footer>
+  </main>
+</div>
+
+<script src="store.js"></script>
+<script src="store-ext.js"></script>
+<script src="cart-system.js"></script>
+<script src="script.js"></script>
+
+<script>
+const S = Store;
+const $ = q => document.querySelector(q);
+
+let v = 'home';
+let f = 'all';
+let q = '';
+let signingOut = false;
+
+const STEPS = ['New', 'Confirmed', 'Shipped', 'Delivered'];
+const ACTIVE = ['New', 'Confirmed', 'Shipped'];
+const SHOP = 'navbar/shop/index.html';
+
+const NAV = [
+  ['home', 'grid-2x2', 'Overview'],
+  ['orders', 'package', 'My orders'],
+  ['profile', 'user-round', 'My profile']
+];
+
+/* Clean inline SVG icon library */
+const ICONS = {
+  'grid-2x2': '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+  package: '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5"/><path d="M3 8v9l9 5 9-5V8"/><path d="M12 13v9"/>',
+  'user-round': '<circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/>',
+  'shopping-bag': '<path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+  'log-out': '<path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>',
+  'life-buoy': '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="m5.6 5.6 4.3 4.3m4.2 4.2 4.3 4.3m0-12.8-4.3 4.3m-4.2 4.2-4.3 4.3"/>',
+  'arrow-up-right': '<path d="M7 17 17 7"/><path d="M7 7h10v10"/>',
+  'arrow-right': '<path d="M5 12h14m-7-7 7 7-7 7"/>',
+  'truck': '<path d="M3 6h12v12H3z"/><path d="M15 10h4l3 3v5h-7z"/><circle cx="7.5" cy="19" r="1.5"/><circle cx="18" cy="19" r="1.5"/>',
+  'check-circle': '<circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/>',
+  'wallet': '<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 9h18"/><path d="M16 14h2"/>',
+  'shopping-cart': '<circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M2 3h2l2.5 12h12l3-9H5"/>',
+  'search': '<circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/>',
+  'refresh-cw': '<path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M5.5 9a7 7 0 0 1 11.8-2L20 12M4 12l2.7 5a7 7 0 0 0 11.8-2"/>',
+  'x-circle': '<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/>',
+  'lock': '<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+  'map-pin': '<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+  'calendar': '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
+  'leaf': '<path d="M20 4c-8 0-14 3-14 10a6 6 0 0 0 6 6c7 0 8-8 8-16Z"/><path d="M4 21c2-5 6-8 11-11"/>',
+  'mail': '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'
+};
+
+function ic(name, size = 19) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="1.65" stroke-linecap="round"
+    stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
+}
+
+const toast = message => {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = message;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2400);
+};
+
+const date = d => {
+  if (!d) return '—';
+  const parsed = new Date(d);
+  return isNaN(parsed) ? '—' : parsed.toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric'
+  });
+};
+
+const ini = name => (name || 'S')
+  .trim().split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase();
+
+const prod = id => S.products().find(p => S.slug(p.name) === id);
+
+const thumb = id => {
+  const p = prod(id);
+  return p
+    ? `<img src="${S.src(p.img)}" alt="${S.esc(p.name)}">`
+    : `<span class="product-placeholder">${ic('leaf', 23)}</span>`;
+};
+
+const kpi = (icon, value, label, extra = '') => `
+  <div class="stat-card">
+    <div class="stat-top">
+      <span class="stat-icon">${ic(icon, 20)}</span>
+      ${extra ? `<span class="stat-extra">${extra}</span>` : ''}
+    </div>
+    <strong>${value}</strong>
+    <span class="stat-label">${label}</span>
+  </div>`;
+
+const empty = `
+  <div class="empty-state">
+    <div class="empty-icon">${ic('package', 28)}</div>
+    <h3>No orders just yet</h3>
+    <p>Your next favourite find is waiting for you.</p>
+    <a class="btn primary" href="${SHOP}">Explore the collection ${ic('arrow-right', 16)}</a>
+  </div>`;
+
+function stepper(order) {
+  if (order.status === 'Cancelled') {
+    return `<div class="cancelled-note">${ic('x-circle', 16)} This order was cancelled</div>`;
+  }
+
+  const current = STEPS.indexOf(order.status);
+  return `<div class="timeline">
+    ${STEPS.map((step, i) => `
+      <div class="timeline-step ${i <= current ? 'done' : ''} ${i === current ? 'current' : ''}">
+        <span class="timeline-dot">${i < current ? ic('check-circle', 13) : ''}</span>
+        <span>${step}</span>
+      </div>`).join('')}
+  </div>`;
+}
+
+function orderCard(order) {
+  const wa = (S.settings().whatsapp || '').replace(/\D/g, '');
+
+  return `
+  <article class="order-card">
+    <div class="order-head">
+      <div>
+        <span class="muted-label">ORDER REFERENCE</span>
+        <h3>#${S.esc(String(order.id))}</h3>
+        <span class="order-date">${ic('calendar', 13)} ${date(order.date)}</span>
+      </div>
+      <span class="badge ${S.esc(order.status)}">${S.esc(order.status)}</span>
+    </div>
+
+    ${stepper(order)}
+
+    <div class="order-items">
+      ${order.items.map(item => `
+        <div class="order-item">
+          <div class="item-image">${thumb(item.id)}</div>
+          <div class="item-info">
+            <b>${S.esc(item.name)}</b>
+            <span>Quantity: ${item.qty} · ${S.money(item.price)}</span>
+          </div>
+          <strong>${S.money(item.price * item.qty)}</strong>
+        </div>`).join('')}
+    </div>
+
+    <div class="order-bottom">
+      <div class="order-total">
+        <span>Total paid</span>
+        <strong>${S.money(order.total)}</strong>
+      </div>
+      <div class="order-actions">
+        ${wa ? `<a class="btn secondary small" target="_blank" rel="noopener"
+          href="https://wa.me/${wa}?text=${encodeURIComponent('Hi, I need help with order ' + order.id)}">
+          ${ic('life-buoy', 15)} Help
+        </a>` : ''}
+        <button class="btn secondary small" data-re="${S.esc(String(order.id))}">
+          ${ic('refresh-cw', 15)} Reorder
+        </button>
+        ${order.status === 'New' ? `
+          <button class="btn cancel small" data-cx="${S.esc(String(order.id))}">
+            Cancel order
+          </button>` : ''}
+      </div>
+    </div>
+  </article>`;
+}
+
+function home(member, orders) {
+  const active = orders.filter(o => ACTIVE.includes(o.status));
+  const spent = orders
+    .filter(o => o.status !== 'Cancelled')
+    .reduce((sum, o) => sum + Number(o.total || 0), 0);
+
+  const cartCount = S.cart().reduce((sum, item) => sum + item.qty, 0);
+  const latest = active[0] || orders[0];
+  const firstName = (member.name || 'there').trim().split(/\s+/)[0];
+
+  return `
+    <section class="welcome">
+      <div class="welcome-content">
+        <span class="eyebrow light">A LITTLE SPACE, JUST FOR YOU</span>
+        <h1>Welcome back, ${S.esc(firstName)}.</h1>
+        <p>We're glad to have you here. Here's what's happening with your account.</p>
+        <div class="welcome-actions">
+          <a class="btn gold" href="${SHOP}">Explore collection ${ic('arrow-right', 16)}</a>
+          <button class="btn outline-light" data-v="orders">View my orders</button>
+        </div>
+      </div>
+      <div class="welcome-mark">${ic('leaf', 76)}</div>
+    </section>
+
+    <section class="stats-grid">
+      ${kpi('package', orders.length, 'Total orders')}
+      ${kpi('truck', active.length, 'Orders in progress')}
+      ${kpi('check-circle', orders.filter(o => o.status === 'Delivered').length, 'Delivered')}
+      ${kpi('wallet', S.money(spent), 'Total spent')}
+    </section>
+
+    ${cartCount ? `
+      <section class="cart-reminder">
+        <div class="reminder-icon">${ic('shopping-bag', 21)}</div>
+        <div class="reminder-copy">
+          <b>Your cart is waiting</b>
+          <span>You have ${cartCount} item${cartCount === 1 ? '' : 's'} saved in your cart.</span>
+        </div>
+        <a href="cart.html" class="btn secondary small">View cart ${ic('arrow-right', 15)}</a>
+      </section>` : ''}
+
+    <section class="section-block">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">STAY IN THE LOOP</span>
+          <h2>${active.length ? 'Your latest order' : 'Your order history'}</h2>
+        </div>
+        <button class="text-link" data-v="orders">All orders ${ic('arrow-right', 15)}</button>
+      </div>
+      ${latest ? orderCard(latest) : empty}
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">CURATED FOR YOU</span>
+          <h2>Discover something lovely</h2>
+        </div>
+        <a class="text-link" href="${SHOP}">Shop all ${ic('arrow-right', 15)}</a>
+      </div>
+      <div class="product-grid">
+        ${S.products().slice(0, 4).map(p => `
+          <a class="product-card" href="${SHOP}">
+            <div class="product-photo">
+              <img src="${S.src(p.img)}" alt="${S.esc(p.name)}">
+              <span class="product-arrow">${ic('arrow-up-right', 17)}</span>
+            </div>
+            <b>${S.esc(p.name)}</b>
+            <span>${S.money(p.price)}</span>
+          </a>`).join('')}
+      </div>
+    </section>`;
+}
+
+function orderList(orders) {
+  const filtered = orders.filter(order =>
+    (f === 'all' ||
+      (f === 'active' ? ACTIVE.includes(order.status) : order.status === f)) &&
+    String(order.id).toLowerCase().includes(q.toLowerCase())
+  );
+
+  return filtered.length ? filtered.map(orderCard).join('') : empty;
+}
+
+function ordersView(orders) {
+  const filters = {
+    all: 'All orders',
+    active: 'In progress',
+    Delivered: 'Delivered',
+    Cancelled: 'Cancelled'
+  };
+
+  const count = key => key === 'all'
+    ? orders.length
+    : key === 'active'
+      ? orders.filter(o => ACTIVE.includes(o.status)).length
+      : orders.filter(o => o.status === key).length;
+
+  return `
+    <section class="page-intro">
+      <span class="eyebrow">YOUR PURCHASES</span>
+      <h1>My orders</h1>
+      <p>Keep track of your purchases, deliveries and past orders.</p>
+    </section>
+
+    <div class="order-toolbar">
+      <div class="filter-list">
+        ${Object.keys(filters).map(key => `
+          <button class="filter-chip ${f === key ? 'selected' : ''}" data-f="${key}">
+            ${filters[key]} <span>${count(key)}</span>
+          </button>`).join('')}
+      </div>
+      <div class="search-box">
+        ${ic('search', 17)}
+        <input id="oq" type="search" placeholder="Search order ID..." value="${S.esc(q)}">
+      </div>
+    </div>
+
+    <div class="order-list" id="ol">${orderList(orders)}</div>`;
+}
+
+function profileView(member) {
+  return `
+    <section class="page-intro">
+      <span class="eyebrow">ACCOUNT SETTINGS</span>
+      <h1>My profile</h1>
+      <p>Manage your personal information and keep your details up to date.</p>
+    </section>
+
+    <div class="profile-layout">
+      <section class="profile-card">
+        <div class="profile-card-head">
+          <div class="profile-avatar">${ini(member.name)}</div>
+          <div>
+            <h3>${S.esc(member.name)}</h3>
+            <span>Member since ${date(member.joined)}</span>
+          </div>
+        </div>
+
+        <div class="form-section-title">Personal information</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="pn">Full name</label>
+            <input id="pn" type="text" value="${S.esc(member.name)}" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="pp">Phone number</label>
+            <input id="pp" type="tel" value="${S.esc(member.phone || '')}" autocomplete="tel">
+          </div>
+          <div class="field full">
+            <label for="pe">Email address</label>
+            <input id="pe" type="email" value="${S.esc(member.email)}" disabled>
+            <small>Your registered email address cannot be changed here.</small>
+          </div>
+          <div class="field full">
+            <label for="pa">Delivery address</label>
+            <textarea id="pa" rows="4" autocomplete="street-address">${S.esc(member.address || '')}</textarea>
+          </div>
+        </div>
+        <button class="btn primary" id="sv">Save changes ${ic('arrow-right', 16)}</button>
+      </section>
+
+      <section class="profile-card password-card">
+        <div class="password-icon">${ic('lock', 22)}</div>
+        <h3>Login & security</h3>
+        <p>Keep your account secure by updating your password regularly.</p>
+
+        <div class="field">
+          <label for="cp">Current password</label>
+          <input id="cp" type="password" autocomplete="current-password" placeholder="Enter current password">
+        </div>
+        <div class="field">
+          <label for="np">New password</label>
+          <input id="np" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+        </div>
+        <button class="btn secondary full-btn" id="sp">Update password ${ic('arrow-right', 16)}</button>
+
+        <div class="security-note">
+          ${ic('lock', 15)}
+          <span>Your account details are private. Never share your password with anyone.</span>
+        </div>
+      </section>
+    </div>`;
+}
+
+function draw() {
+  const member = S.me();
+  if (!member) return;
+
+  const orders = S.myOrders();
+
+  $('#nav').innerHTML = NAV.map(([key, icon, label]) => `
+    <button class="nav-link ${v === key ? 'active' : ''}" data-v="${key}">
+      <span class="nav-icon">${ic(icon, 19)}</span>
+      <span>${label}</span>
+      ${v === key ? '<span class="nav-indicator"></span>' : ''}
+    </button>`).join('') + `
+    <a class="nav-link shop-link" href="${SHOP}">
+      <span class="nav-icon">${ic('shopping-bag', 19)}</span>
+      <span>Continue shopping</span>
+      ${ic('arrow-up-right', 15)}
+    </a>`;
+
+  const current = NAV.find(item => item[0] === v);
+  $('#ttl').textContent = current ? current[2] : 'Overview';
+  $('#av').textContent = ini(member.name);
+  $('#helpIcon').innerHTML = ic('life-buoy', 19);
+  $('#cartIcon').innerHTML = ic('shopping-bag', 18);
+  $('#logoutIcon').innerHTML = ic('log-out', 18);
+
+  const views = {
+    home: () => home(member, orders),
+    orders: () => ordersView(orders),
+    profile: () => profileView(member)
+  };
+
+  $('#view').innerHTML = views[v] ? views[v]() : views.home();
+}
+
+function reorder(id) {
+  const order = S.orders().find(o => String(o.id) === String(id));
+  if (!order) return;
+
+  const cart = S.cart();
+  let added = 0;
+
+  order.items.forEach(item => {
+    const product = prod(item.id);
+    if (!product || Number(product.stock) < 1) return;
+
+    added++;
+    const existing = cart.find(x => x.id === item.id);
+    const available = Number(product.stock);
+
+    if (existing) {
+      existing.qty = Math.min(existing.qty + item.qty, available);
+    } else {
+      cart.push({
+        id: item.id,
+        name: product.name,
+        price: product.price,
+        category: product.desc,
+        image: S.src(product.img),
+        qty: Math.min(item.qty, available)
+      });
+    }
+  });
+
+  if (!added) return toast('These items are currently out of stock.');
+
+  localStorage.setItem('sukhdev_cart', JSON.stringify(cart));
+  toast('Available items added to your cart.');
+  setTimeout(() => location.href = 'cart.html', 700);
+}
+
+document.addEventListener('click', async event => {
+  const target = event.target.closest('button, a');
+  if (!target) return;
+
+  const data = target.dataset;
+
+  if (data.v) {
+    v = data.v;
+    draw();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (data.f) {
+    f = data.f;
+    draw();
+  }
+
+  if (data.re) reorder(data.re);
+
+  if (data.cx && confirm('Are you sure you want to cancel this order?')) {
+    S.cancel(data.cx);
+    toast('Order cancelled.');
+    draw();
+  }
+
+  if (target.id === 'sv') {
+    const profile = {
+      name: $('#pn').value.trim(),
+      phone: $('#pp').value.trim(),
+      address: $('#pa').value.trim()
+    };
+
+    if (!profile.name) return toast('Please enter your name.');
+
+    S.updateUser(profile);
+    toast('Your profile has been updated.');
+    draw();
+  }
+
+  if (target.id === 'sp') {
+    const current = $('#cp').value;
+    const next = $('#np').value;
+
+    if (!current || !next) return toast('Please fill in both password fields.');
+    if (next.length < 6) return toast('New password needs at least 6 characters.');
+
+    try {
+      await window.SDAuth.changePassword(current, next);
+      $('#cp').value = '';
+      $('#np').value = '';
+      toast('Password updated successfully.');
+    } catch (err) {
+      toast(window.SDAuth.errorMessage(err));
+    }
+  }
+});
+
+document.addEventListener('input', event => {
+  if (event.target.id === 'oq') {
+    q = event.target.value;
+    const list = $('#ol');
+    if (list) list.innerHTML = orderList(S.myOrders());
+  }
+});
+
+$('#out').addEventListener('click', async () => {
+  if (!confirm('Are you sure you want to sign out?')) return;
+  signingOut = true;
+  try { await window.SDAuth.logout(); } catch (e) {}
+  S.logout();
+  location.href = 'index.html';
+});
+
+</script>
+
+<!-- Firebase auth guard: signed out -> login, admin/staff -> admin panel, customer -> account -->
+<script type="module">
+  import { SDAuth } from './firebase.js';
+
+  SDAuth.onChange(user => {
+    if (!user) {
+      if (!signingOut) location.replace('login.html?next=account.html');
+      return;
+    }
+    if (SDAuth.roleOf(user)) {
+      location.replace('admin.html');
+      return;
+    }
+    draw();
+  });
+</script>
+
+</body>
+</html>
