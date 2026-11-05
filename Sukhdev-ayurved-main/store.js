@@ -18,14 +18,10 @@ const S={ROOT,get,set,esc,hash:H,slug,
  /* cart = YOUR cart system (sukhdev_cart) */
  cart:()=>{try{return JSON.parse(localStorage.getItem('sukhdev_cart'))||[]}catch(e){return[]}},
  total:()=>S.cart().reduce((a,i)=>a+i.price*i.qty,0),
- /* users */
+ /* users — authentication is handled by Firebase (firebase.js), which mirrors the user here */
  users:()=>get('users',[]),
  me(){const id=localStorage.getItem('sd_session');return S.users().find(u=>u.id===id)||null},
- register(d){const email=d.email.toLowerCase().trim();if(S.users().some(x=>x.email===email))return 'This email is already registered';
-  const n={id:'u'+Date.now(),name:d.name,email,phone:d.phone,address:'',pass:H(d.password),joined:Date.now()};
-  set('users',[...S.users(),n]);localStorage.setItem('sd_session',n.id);return ''},
- login(email,pw){const u=S.users().find(x=>x.email===email.toLowerCase().trim()&&x.pass===H(pw));if(!u)return false;localStorage.setItem('sd_session',u.id);return true},
- logout(){localStorage.removeItem('sd_session')},
+ logout(){localStorage.removeItem('sd_session');if(window.SDAuth)window.SDAuth.logout().catch(()=>{})},
  updateUser(patch){const m=S.me();if(m)set('users',S.users().map(u=>u.id===m.id?{...u,...patch}:u))},
  myOrders(){const m=S.me();return m?S.orders().filter(o=>o.uid===m.id):[]},
  /* orders */

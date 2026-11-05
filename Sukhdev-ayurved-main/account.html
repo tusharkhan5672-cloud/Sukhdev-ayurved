@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,11 +72,10 @@
 const S = Store;
 const $ = q => document.querySelector(q);
 
-if (!S.me()) location.replace('login.html?next=account.html');
-
 let v = 'home';
 let f = 'all';
 let q = '';
+let signingOut = false;
 
 const STEPS = ['New', 'Confirmed', 'Shipped', 'Delivered'];
 const ACTIVE = ['New', 'Confirmed', 'Shipped'];
@@ -486,7 +484,7 @@ function reorder(id) {
   setTimeout(() => location.href = 'cart.html', 700);
 }
 
-document.addEventListener('click', event => {
+document.addEventListener('click', async event => {
   const target = event.target.closest('button, a');
   if (!target) return;
 
@@ -526,18 +524,20 @@ document.addEventListener('click', event => {
   }
 
   if (target.id === 'sp') {
-    const member = S.me();
     const current = $('#cp').value;
     const next = $('#np').value;
 
     if (!current || !next) return toast('Please fill in both password fields.');
-    if (S.hash(current) !== member.pass) return toast('Current password is incorrect.');
     if (next.length < 6) return toast('New password needs at least 6 characters.');
 
-    S.updateUser({ pass: S.hash(next) });
-    $('#cp').value = '';
-    $('#np').value = '';
-    toast('Password updated successfully.');
+    try {
+      await window.SDAuth.changePassword(current, next);
+      $('#cp').value = '';
+      $('#np').value = '';
+      toast('Password updated successfully.');
+    } catch (err) {
+      toast(window.SDAuth.errorMessage(err));
+    }
   }
 });
 
@@ -549,14 +549,32 @@ document.addEventListener('input', event => {
   }
 });
 
-$('#out').addEventListener('click', () => {
-  if (confirm('Are you sure you want to sign out?')) {
-    S.logout();
-    location.href = 'index.html';
-  }
+$('#out').addEventListener('click', async () => {
+  if (!confirm('Are you sure you want to sign out?')) return;
+  signingOut = true;
+  try { await window.SDAuth.logout(); } catch (e) {}
+  S.logout();
+  location.href = 'index.html';
 });
 
-draw();
 </script>
+
+<!-- Firebase auth guard: signed out -> login, admin/staff -> admin panel, customer -> account -->
+<script type="module">
+  import { SDAuth } from './firebase.js';
+
+  SDAuth.onChange(user => {
+    if (!user) {
+      if (!signingOut) location.replace('login.html?next=account.html');
+      return;
+    }
+    if (SDAuth.roleOf(user)) {
+      location.replace('admin.html');
+      return;
+    }
+    draw();
+  });
+</script>
+
 </body>
 </html>

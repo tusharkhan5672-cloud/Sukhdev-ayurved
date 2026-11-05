@@ -1,3 +1,5 @@
+import { SDAuth } from './firebase.js';
+
 (function(){
 'use strict';
 const $=q=>document.querySelector(q);
@@ -14,16 +16,16 @@ sty.textContent=`.badge.Paid,.badge.Resolved{background:#e1f3e4;color:#1f7a3a}.b
 document.head.appendChild(sty);
 
 /* ---- core helpers ---- */
-const H=s=>{let h=5381;for(const c of String(s)){h=((h<<5)+h+c.charCodeAt(0))|0}return 'h'+h};
-const DEF={id:'kushagarwal',pass:H('Kush@2026')};
-const AC=()=>{let a=null;try{a=JSON.parse(localStorage.getItem('sd_admin'))}catch(e){}return(a&&a.id&&a.pass)?a:DEF};
 const g=(k,d)=>S.get(k,d),sv=(k,v)=>S.set(k,v);
 const ST=['New','Confirmed','Shipped','Delivered','Cancelled'],PAY=['Pending','Paid','Failed','Refunded'];
 const PERM={manager:['dash','orders','products','customers','support','marketing','reports','payments','shipping','website'],support:['dash','orders','customers','support']};
 const staff=()=>g('staff',[]),coupons=()=>g('coupons',[]),tickets=()=>g('tickets',[]),banners=()=>g('banners',[]);
 const ship=()=>({charge:0,freeAbove:999,zones:[],couriers:['India Post','Delhivery','DTDC'],...g('shipping',{})});
-const sess=()=>sessionStorage.getItem('sd_admin')||'';
-const me=()=>{const x=sess();if(x==='1')return{id:AC().id,name:'Owner',role:'owner'};if(x.startsWith('staff:')){const u=staff().find(a=>a.id===x.slice(6)&&!a.off);if(u)return{id:u.id,name:u.name,role:u.role}}return null};
+
+/* current admin (set from Firebase auth state) */
+let cur=null;
+const setCur=u=>{const r=u?SDAuth.roleOf(u):null;cur=r?{id:(u.email||'').toLowerCase(),name:r==='owner'?'Owner':(u.displayName||u.email),role:r}:null};
+const me=()=>cur;
 const ok=()=>!!me();
 const can=v=>{const u=me();return !!u&&(u.role==='owner'||(PERM[u.role]||[]).includes(v))};
 const log=m=>{const u=me();sv('logs',[{t:Date.now(),u:u?u.id:'-',m},...g('logs',[])].slice(0,300))};
@@ -72,30 +74,47 @@ const NAV=[
  ['security','Security','<rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 018 0v4"/>'],
  ['settings','Settings','<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>']];
 
-/* ---- login ---- */
-function tryLogin(e){
- if(e)e.preventDefault();
+/* ---- login (Firebase) ---- */
+async function doSignIn(fn,id){
  const err=$('#lerr');
  try{
-  if(Date.now()<lock){err.textContent='Too many attempts. Wait 30 seconds.';return}
-  const a=AC(),id=$('#uid').value.trim().toLowerCase(),pw=$('#upw').value;
-  let who='';
-  if(id===String(a.id).toLowerCase()&&H(pw)===a.pass)who='1';
-  else{const u=staff().find(x=>x.id.toLowerCase()===id&&x.pass===H(pw)&&!x.off);if(u)who='staff:'+u.id}
+  const u=await fn();
+  const r=SDAuth.roleOf(u);
   const hist=g('logins',[]);
-  hist.unshift({t:Date.now(),id,ok:!!who});sv('logins',hist.slice(0,100));
-  if(who){sessionStorage.setItem('sd_admin',who);tries=0;$('#upw').value='';err.textContent='';last=Date.now();log('Signed in');boot()}
-  else{if(++tries>=5){lock=Date.now()+30000;tries=0}err.textContent='Wrong ID or password'}
- }catch(x){err.textContent='Error: '+x.message}
+  hist.unshift({t:Date.now(),id:(u.email||id||'').toLowerCase(),ok:!!r});sv('logins',hist.slice(0,100));
+  if(!r){
+   let msg='This account does not have admin access.';
+   if(!u.emailVerified){try{await SDAuth.resendVerification()}catch(x){}msg='Please verify your email (we just sent a link), then sign in again.'}
+   await SDAuth.logout();err.textContent=msg;return
+  }
+  setCur(u);tries=0;$('#upw').value='';err.textContent='';last=Date.now();log('Signed in');boot();
+ }catch(x){
+  if(++tries>=5){lock=Date.now()+30000;tries=0}
+  err.textContent=SDAuth.errorMessage(x);
+ }
+}
+async function tryLogin(e){
+ if(e)e.preventDefault();
+ const err=$('#lerr');err.textContent='';
+ if(Date.now()<lock){err.textContent='Too many attempts. Wait 30 seconds.';return}
+ const id=$('#uid').value.trim(),pw=$('#upw').value;
+ if(!id||!pw){err.textContent='Enter your email and password';return}
+ await doSignIn(()=>SDAuth.login(id,pw),id);
 }
 $('#lf').addEventListener('submit',tryLogin);
+$('#gbtn').addEventListener('click',()=>{$('#lerr').textContent='';doSignIn(()=>SDAuth.google(),'')});
+$('#fpw').addEventListener('click',async()=>{
+ const email=$('#uid').value.trim(),err=$('#lerr');
+ if(!email){err.textContent='Enter your email above first';return}
+ try{await SDAuth.resetPassword(email);err.textContent='Password reset email sent to '+email}catch(x){err.textContent=SDAuth.errorMessage(x)}
+});
 function boot(){
  $('#gate').classList.toggle('hide',ok());
  $('#console').classList.toggle('hide',!ok());
  if(ok())draw();
 }
 ['click','keydown','input'].forEach(ev=>document.addEventListener(ev,()=>{last=Date.now()}));
-setInterval(()=>{if(ok()&&Date.now()-last>15*60*1000){sessionStorage.removeItem('sd_admin');$('#mb').classList.add('hide');$('#md').innerHTML='';boot();$('#lerr').textContent='Signed out after 15 minutes of inactivity.'}},30000);
+setInterval(async()=>{if(ok()&&Date.now()-last>15*60*1000){await SDAuth.logout();cur=null;$('#mb').classList.add('hide');$('#md').innerHTML='';boot();$('#lerr').textContent='Signed out after 15 minutes of inactivity.'}},30000);
 
 /* ---- order helpers ---- */
 const updOrder=(id,patch)=>sv('orders',S.orders().map(o=>o.id===id?{...o,...patch}:o));
@@ -299,17 +318,20 @@ function settings(){
  <div class="card"><h3>Backup &amp; restore</h3><small style="margin-bottom:14px">Data lives in this browser. Export a backup regularly.</small><div class="acts"><button class="btn ghost sm" data-a="export">Export</button><label class="btn ghost sm" style="margin:0;cursor:pointer">Import<input type="file" id="imp" accept=".json" class="hide"></label><button class="btn danger sm" data-a="reset">Reset all</button></div></div></div>`;
 }
 
-/* ---- security ---- */
+/* ---- security (Firebase) ---- */
 function security(){
- const a=AC(),sf=staff(),lg=g('logins',[]).slice(0,10),ac=g('logs',[]).slice(0,25);
- return `<div class="two"><div class="card"><h3>Owner login</h3>${F('Admin ID','aid',a.id)}${F('Current password','acp','','password')}${F('New password (optional)','anp','','password')}<button class="btn" data-a="savea">Update login</button>
+ const sf=staff(),lg=g('logins',[]).slice(0,10),ac=g('logs',[]).slice(0,25);
+ return `<div class="two"><div class="card"><h3>Owner login</h3>
+ <small>Owner account: <b>${E(SDAuth.OWNER_EMAIL)}</b></small>
+ <small class="mt">Sign-in is handled by Firebase Authentication. The owner email must be verified (Google sign-in is verified automatically).</small>
+ <div class="acts mt"><button class="btn" data-a="resetpw">Email me a password reset link</button></div>
  <small class="mt">Sessions expire after 15 minutes of inactivity.</small></div>
- <div class="card"><div class="row"><h3>Staff accounts</h3><button class="btn sm" data-a="stform">Add staff</button></div>${tb(['Name','ID','Role',''],sf.map(u=>`<tr><td>${E(u.name)}${u.off?' <span class="badge Blocked">Off</span>':''}</td><td>${E(u.id)}</td><td>${u.role}</td><td><div class="acts"><button class="btn ghost sm" data-a="stoff" data-id="${u.id}">${u.off?'Enable':'Disable'}</button><button class="btn danger sm" data-a="delst" data-id="${u.id}">Delete</button></div></td></tr>`),'No staff yet')}
- <small class="mt">Manager: everything except Settings &amp; Security. Support: orders, customers, support.</small></div></div>
- <div class="two"><div class="card"><h3>Login history</h3>${tb(['When','ID','Result'],lg.map(l=>`<tr><td>${DT(l.t)}</td><td>${E(l.id)}</td><td><span class="badge ${l.ok?'Paid':'Failed'}">${l.ok?'OK':'Failed'}</span></td></tr>`),'No logins')}</div>
+ <div class="card"><div class="row"><h3>Staff accounts</h3><button class="btn sm" data-a="stform">Add staff</button></div>${tb(['Name','Email','Role',''],sf.map(u=>`<tr><td>${E(u.name)}${u.off?' <span class="badge Blocked">Off</span>':''}</td><td>${E(u.id)}</td><td>${u.role}</td><td><div class="acts"><button class="btn ghost sm" data-a="stoff" data-id="${u.id}">${u.off?'Enable':'Disable'}</button><button class="btn danger sm" data-a="delst" data-id="${u.id}">Delete</button></div></td></tr>`),'No staff yet')}
+ <small class="mt">Manager: everything except Settings &amp; Security. Support: orders, customers, support. Staff must create an account (or use Google) with this exact email and verify it before they can open the admin panel.</small></div></div>
+ <div class="two"><div class="card"><h3>Login history</h3>${tb(['When','Email','Result'],lg.map(l=>`<tr><td>${DT(l.t)}</td><td>${E(l.id)}</td><td><span class="badge ${l.ok?'Paid':'Failed'}">${l.ok?'OK':'Failed'}</span></td></tr>`),'No logins')}</div>
  <div class="card"><h3>Activity log</h3>${tb(['When','User','Action'],ac.map(l=>`<tr><td>${DT(l.t)}</td><td>${E(l.u)}</td><td>${E(l.m)}</td></tr>`),'No activity')}</div></div>`;
 }
-function stform(){openModal(`<h3 style="margin-bottom:18px">Add staff</h3>${F('Name','sn')}${F('Login ID','si')}${SEL('Role','sr',['manager','support'],'support')}${F('Password (6+ chars)','sw','','password')}<div class="acts"><button class="btn" data-a="savest">Create</button><button class="btn ghost" data-a="close">Cancel</button></div>`)}
+function stform(){openModal(`<h3 style="margin-bottom:18px">Add staff</h3>${F('Name','sn')}${F('Email (their Firebase login)','si','','email')}${SEL('Role','sr',['manager','support'],'support')}<div class="acts"><button class="btn" data-a="savest">Add</button><button class="btn ghost" data-a="close">Cancel</button></div>`)}
 
 /* ---- shell ---- */
 const V={dash,orders,products,customers,support,marketing,payments,shipping,reports,website,security,settings};
@@ -329,7 +351,7 @@ function draw(){
 /* ---- actions ---- */
 const A={
  nav:id=>{view=id},of:id=>{of=id},pf:id=>{pf=id},
- out:()=>{log('Signed out');sessionStorage.removeItem('sd_admin');boot();return false},
+ out:async()=>{log('Signed out');await SDAuth.logout();cur=null;boot();return false},
  view:id=>{viewOrder(id);return false},close:()=>{closeModal();return false},
  print:id=>{invoice(id);return false},slip:id=>{slip(id);return false},label:id=>{label(id);return false},
  saveo:id=>{updOrder(id,{courier:val('oc'),tracking:val('ot'),note:val('on')});log('Order #'+id+' details updated');toast('Saved');return false},
@@ -374,17 +396,18 @@ const A={
  saveship:()=>{sv('shipping',{charge:+val('sc')||0,freeAbove:+val('sf')||0,couriers:csvl(val('sp')),zones:lines(val('sz')).map(l=>{const[pin,charge,days]=l.split('|').map(x=>x.trim());return{pin,charge:+charge||0,days:+days||0}}).filter(z=>z.pin)});log('Shipping rules updated');toast('Shipping saved')},
  /* settings & website */
  saves:()=>{const s={...S.settings()};[...WEB,...BIZ].forEach(([k,,t])=>{const e=$('#k_'+k);if(e)s[k]=t==='c'?e.checked:e.value});sv('settings',s);log('Settings updated');toast('Saved');return false},
- savea:()=>{const c=AC();if(H(val('acp'))!==c.pass){toast('Current password is wrong');return false}
-  const nid=val('aid');if(!nid){toast('ID cannot be empty');return false}const np=$('#anp').value;if(np&&np.length<6){toast('Password needs 6+ characters');return false}
-  localStorage.setItem('sd_admin',JSON.stringify({id:nid,pass:np?H(np):c.pass}));log('Owner login changed');toast('Login updated');return false},
+ /* security */
+ resetpw:async()=>{try{await SDAuth.resetPassword(SDAuth.OWNER_EMAIL);toast('Reset link sent to '+SDAuth.OWNER_EMAIL)}catch(x){toast(SDAuth.errorMessage(x))}return false},
  stform:()=>{stform();return false},
- savest:()=>{const u={id:val('si'),name:val('sn'),role:val('sr'),pass:H($('#sw').value)};if(!u.id||!u.name||$('#sw').value.length<6){toast('Fill all fields (password 6+ chars)');return false}
-  if(staff().some(x=>x.id.toLowerCase()===u.id.toLowerCase())||u.id.toLowerCase()===AC().id.toLowerCase()){toast('That ID is taken');return false}
+ savest:()=>{const u={id:val('si').toLowerCase(),name:val('sn'),role:val('sr')};
+  if(!u.id||!u.name){toast('Name and email are required');return false}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(u.id)){toast('Enter a valid email');return false}
+  if(staff().some(x=>String(x.id).toLowerCase()===u.id)||u.id===SDAuth.OWNER_EMAIL.toLowerCase()){toast('That email is already added');return false}
   sv('staff',[...staff(),u]);log('Added staff '+u.id);closeModal();return false},
  stoff:id=>sv('staff',staff().map(u=>u.id===id?{...u,off:!u.off}:u)),
  delst:id=>{if(confirm('Delete this staff account?'))sv('staff',staff().filter(u=>u.id!==id))},
  export:()=>{const d={};Object.keys(localStorage).filter(k=>k.startsWith('sd_')&&!['sd_admin','sd_session'].includes(k)).forEach(k=>d[k]=localStorage.getItem(k));dl('sukhdev-backup-'+Date.now()+'.json',JSON.stringify(d),'application/json');return false},
- reset:()=>{if(confirm('This erases ALL orders, customers, products and settings. Continue?'))Object.keys(localStorage).filter(k=>k.startsWith('sd_')&&k!=='sd_admin').forEach(k=>localStorage.removeItem(k))}
+ reset:()=>{if(confirm('This erases ALL orders, customers, products and settings. Continue?'))Object.keys(localStorage).filter(k=>k.startsWith('sd_')&&k!=='sd_admin'&&k!=='sd_session').forEach(k=>localStorage.removeItem(k))}
 };
 document.addEventListener('click',async e=>{
  if(e.target.id==='mb')return closeModal();
@@ -407,5 +430,14 @@ document.addEventListener('input',e=>{
  if(i==='pq'){pq=v;$('#list').innerHTML=plist()}
  if(i==='cq'){cq=v;$('#list').innerHTML=clist()}
 });
-boot();
+
+/* ---- start: follow Firebase auth state ---- */
+SDAuth.onChange(u=>{setCur(u);boot()});
+
+function boot(){
+ $('#gate').classList.remove('checking');
+ $('#gate').classList.toggle('hide',ok());
+ $('#console').classList.toggle('hide',!ok());
+ if(ok())draw();
+}
 })();
