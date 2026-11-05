@@ -1,0 +1,1021 @@
+/* ==========================================================================
+   CSS Variables (Theme Configuration)
+   ========================================================================== */
+:root {
+    /* Colors */
+    --clr-primary: #1F3325; 
+    --clr-accent: #C2A573;  
+    --clr-light: #FDFBF7;   
+    --clr-dark: #000000;
+    --clr-text: #4A4A4A;
+    --clr-pill: #e1eb9b;    
+    --clr-card-bg: #F4F5F0; 
+    --clr-sale: #D9534F;
+    --clr-bestseller: #8A9A5B;
+    
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Lato', sans-serif;
+    
+    /* Spacing & Layout */
+    --nav-height: 80px;
+    --container-padding: 1.5rem;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+html, body {
+    overflow-x: hidden; /* Fixes horizontal scroll bugs */
+    scroll-behavior: smooth;
+    width: 100%;
+}
+
+body { 
+    font-family: var(--font-body); 
+    color: var(--clr-text); 
+    background-color: var(--clr-light); 
+    line-height: 1.6; 
+    -webkit-font-smoothing: antialiased; 
+}
+
+h1, h2, h3, h4 { 
+    font-family: var(--font-heading); 
+    color: var(--clr-dark); 
+}
+
+a { 
+    text-decoration: none; 
+    color: inherit; 
+}
+
+button { 
+    cursor: pointer; 
+    background: none; 
+    border: none; 
+    font-family: inherit; 
+}
+
+/* ==========================================================================
+   Navbar Components
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    background-color: #fffcf6; /* Kept as requested */
+    z-index: 1000;
+    transition: var(--transition-smooth);
+    border-bottom: 1px solid transparent;
+}
+
+.navbar.scrolled {
+    background-color: rgb(250, 250, 250);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* Brand Logo */
+.brand-logo-wrapper {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo {
+    height: 55px; /* Adjusted to fit nicely */
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.nav-toggle {
+    display: flex;
+    color: var(--clr-primary);
+}
+
+.nav-links {
+    display: none;
+    color: #000000;
+}
+
+.search-text {
+    display: none; /* Hidden on mobile */
+    font-size: 0.85rem;
+    color: var(--clr-text);
+    margin-right: 1rem;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.icon-btn {
+    color: var(--clr-primary);
+    position: relative;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+}
+
+.icon-btn:hover {
+    color: var(--clr-accent);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: var(--clr-pill);
+    color: var(--clr-primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ==========================================================================
+   Hero Section (Split Layout)
+   ========================================================================== */
+.hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-split {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* Mobile defaults to seeing only the right (leaf) background for readability */
+.hero-left {
+    display: none;
+    background-color: #a3ab93;
+}
+
+.hero-right {
+    right: 0;
+    width: 100%;
+}
+
+.hero-img-left {
+    width: 100%;
+    height: 1000px;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+.hero-img-right {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay-dark {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(31, 51, 37, 0.4); /* Slight darkening for text readability */
+}
+
+/* Overlaid Content */
+.hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 600px;
+    color: var(--clr-light);
+    animation: fadeUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+    padding: 0 var(--container-padding);
+}
+
+.hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--clr-light);
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.hero-title {
+    color: var(--clr-light);
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+}
+
+.hero-title em {
+    font-style: italic;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+}
+
+/* Pill Button */
+.btn-pill {
+    background-color: var(--clr-pill);
+    color: var(--clr-primary);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 0.75rem 1.25rem 0.75rem 1.5rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-icon {
+    background-color: var(--clr-dark);
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-pill:hover {
+    transform: scale(1.05);
+    background-color: #d1dc86;
+}
+
+/* Bottom Controls */
+.hero-controls {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--clr-light);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.progress-bar {
+    width: 100px;
+    height: 2px;
+    background-color: rgba(255,255,255,0.3);
+    position: relative;
+}
+
+.progress-fill {
+    width: 33%;
+    height: 100%;
+    background-color: var(--clr-light);
+}
+
+.nav-arrows {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.arrow-btn {
+    color: var(--clr-light);
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   Product Scroll Section
+   ========================================================================== */
+.product-section {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 5rem var(--container-padding);
+}
+
+.section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 1rem;
+}
+
+.filter-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--clr-text);
+    background-color: transparent;
+    border: 1px solid transparent;
+    transition: var(--transition-smooth);
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background-color: #F4F5F0;
+    border: 1px solid #E0E0E0;
+    color: var(--clr-dark);
+}
+
+/* Slider Layout */
+.product-slider-wrapper {
+    position: relative;
+}
+
+.product-slider {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2rem;
+}
+
+/* Hide Scrollbar */
+.product-slider::-webkit-scrollbar { display: none; }
+.product-slider { -ms-overflow-style: none; scrollbar-width: none; }
+
+.product-card {
+    min-width: 280px;
+    max-width: 320px;
+    flex: 0 0 auto;
+    background-color: var(--clr-card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    scroll-snap-align: start;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+
+/* Badges */
+.badge {
+    position: absolute;
+    top: 1.5rem; left: 1.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.7rem; font-weight: 700;
+    color: white; z-index: 2;
+}
+.badge-sale { background-color: var(--clr-sale); }
+.badge-bestseller { background-color: var(--clr-bestseller); }
+
+.product-img-wrapper {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.product-img {
+    height: 80%;
+    object-fit: contain;
+    transition: var(--transition-smooth);
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.08);
+}
+
+.product-info {
+    margin-top: auto;
+}
+
+.product-category {
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.25rem;
+}
+
+.product-name {
+    font-size: 1.25rem;
+    font-family: var(--font-heading);
+    margin-bottom: 1rem;
+}
+
+.product-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.price-old {
+    text-decoration: line-through;
+    color: #A0A0A0;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+    font-weight: 400;
+}
+
+.add-to-cart-btn {
+    background-color: var(--clr-dark);
+    height: 36px; width: 36px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.add-to-cart-btn:hover {
+    background-color: var(--clr-primary);
+    transform: scale(1.1);
+}
+
+.slider-controls {
+    display: none; /* Hidden on mobile */
+}
+
+
+/* ==========================================================================
+   Media Queries (Laptop & Desktop)
+   ========================================================================== */
+@media (min-width: 1024px) {
+    /* Navbar Desktop Layout: Left, Center, Right Grid */
+    .nav-container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr; 
+    }
+
+    .nav-toggle {
+        display: none;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        justify-content: flex-start;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .nav-arrow {
+        font-size: 0.6rem;
+    }
+
+    .search-text {
+        display: inline-block;
+    }
+
+    .nav-actions {
+        justify-content: flex-end;
+    }
+
+    /* Split Screen Hero Layout for Laptops+ */
+    .hero-left {
+        display: block;
+        left: 0;
+        width: 50vw;
+    }
+
+    .hero-right {
+        right: 0;
+        width: 50vw;
+    }
+    
+    .hero-title {
+        font-size: 4.5rem;
+    }
+}
+
+/* ==========================================================================
+   NEW LAYOUT INTEGRATION (Screenshot Design)
+   ========================================================================== */
+
+.sukhdev-main {
+    background-color: var(--clr-light); /* Uses your existing off-white */
+    overflow: hidden;
+}
+
+/* Typography & Reusables */
+.sd-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.sd-section-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    color: var(--clr-primary);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.sd-icon {
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+/* Buttons */
+.sd-btn-outline {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #d1d1d1;
+    font-family: var(--font-body);
+    text-decoration: none;
+    color: var(--clr-text);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: var(--transition-smooth);
+}
+.sd-btn-outline:hover {
+    background-color: var(--clr-primary);
+    color: #fff;
+    border-color: var(--clr-primary);
+}
+
+/* 1. Hero Section */
+.sd-hero {
+    position: relative;
+    text-align: center;
+    padding: calc(var(--nav-height) + 80px) 20px 100px;
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.sd-hero-content {
+    position: relative;
+    z-index: 10;
+}
+
+.sd-main-title {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    color: var(--clr-primary);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 30px;
+}
+
+/* Placeholder for corner leaves (Replace with your actual PNGs) */
+.sd-leaf {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background-color: #e3e7d9; /* Placeholder blob color */
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.5;
+    z-index: 1;
+}
+.left-leaf { top: 10%; left: -5%; }
+.right-leaf { top: 30%; right: -5%; }
+
+/* 2. Feature Split Section */
+.sd-feature-split {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 80px 10%;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    background-color: #fff;
+}
+
+.sd-feature-left {
+    flex: 1;
+    min-width: 300px;
+    position: relative;
+    z-index: 2;
+}
+
+.sd-description {
+    font-size: 0.85rem;
+    color: var(--clr-text);
+    margin-bottom: 20px;
+    max-width: 85%;
+}
+
+.sd-price-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+
+.sd-feature-small-img {
+    margin-top: 40px;
+    margin-left: 20%;
+    max-width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.sd-feature-small-img img, .sd-feature-right img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.sd-feature-right {
+    flex: 1.2;
+    min-width: 300px;
+    z-index: 2;
+}
+
+.sd-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    font-size: 12vw;
+    font-family: var(--font-heading);
+    color: rgba(0,0,0,0.02);
+    z-index: 1;
+    pointer-events: none;
+    letter-spacing: 0.2em;
+}
+
+/* 3. Bestsellers Section */
+.sd-bestsellers {
+    padding: 100px 5%;
+    text-align: center;
+}
+
+.sd-header-center {
+    margin-bottom: 60px;
+}
+.sd-description-sm {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.sd-product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.sd-product-card {
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.sd-product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.sd-product-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--clr-primary);
+}
+
+.sd-cat {
+    font-size: 0.7rem;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.sd-price {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--clr-text);
+}
+
+.sd-price strike {
+    color: #ccc;
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+.sd-btn-cart {
+    width: 100%;
+    padding: 12px 0;
+    margin-top: auto;
+    background: transparent;
+    border: 1px solid #e0e0e0;
+    color: var(--clr-text);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: var(--transition-smooth);
+}
+
+.sd-btn-cart:hover {
+    background-color: var(--clr-primary);
+    color: #fff;
+    border-color: var(--clr-primary);
+}
+
+.sd-sale-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #d9534f;
+    color: white;
+    font-size: 0.55rem;
+    padding: 3px 6px;
+    letter-spacing: 1px;
+}
+
+/* 4. Promo Cards Section */
+.sd-promo-blocks {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 5% 80px;
+    gap: 20px;
+}
+
+.sd-promo-card {
+    flex: 1;
+    min-width: 300px;
+    height: 450px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+}
+
+.sd-promo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
+}
+
+.sd-promo-overlay {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 40px 20px;
+}
+
+.sd-promo-overlay h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.sd-promo-overlay p {
+    font-size: 0.85rem;
+    margin-bottom: 25px;
+    color: #eaeaea;
+}
+
+.sd-btn-solid {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #fff;
+    color: var(--clr-primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: var(--transition-smooth);
+}
+.sd-btn-solid:hover {
+    background-color: var(--clr-pill);
+}
+
+/* Footer Updates */
+.sd-footer {
+    text-align: center;
+    padding: 40px 20px 60px;
+    background-color: #fff;
+    border-top: 1px solid #eaeaea;
+}
+
+.sd-footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.sd-footer-bottom p {
+    font-family: var(--font-body); /* Uses your clean Lato font */
+    font-size: 0.85rem;
+    font-style: normal;
+    color: #888;
+    margin: 0;
+}
+
+.sd-credit {
+    font-size: 0.75rem !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.sd-credit strong {
+    color: var(--clr-primary);
+}
+
+/* Responsive Grid Adjustments */
+@media (max-width: 1024px) {
+    .sd-product-grid { grid-template-columns: repeat(3, 1fr); }
+    .sd-main-title { font-size: 2.8rem; }
+}
+
+@media (max-width: 768px) {
+    .sd-product-grid { grid-template-columns: repeat(2, 1fr); }
+    .sd-promo-blocks { flex-direction: column; }
+    .sd-feature-split { padding: 40px 5%; }
+    .sd-watermark { font-size: 18vw; }
+}
+
+@media (max-width: 480px) {
+    .sd-product-grid { grid-template-columns: 1fr; }
+}
+
+/* Update the main hero container */
+.sd-hero {
+    position: relative;
+    text-align: center;
+    padding: calc(var(--nav-height) + 80px) 20px 100px;
+    height: 100vh; /* Match your old 100vh request */
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Keeps the absolute images from spilling out */
+}
+
+/* Ensure the text content sits ON TOP of the images */
+.sd-hero-content {
+    position: relative;
+    z-index: 10;
+}
+
+/* Modify text colors to be white/light over the dark overlay */
+.text-light {
+    color: var(--clr-light) !important;
+}
+.btn-light {
+    color: var(--clr-light) !important;
+    border-color: var(--clr-light) !important;
+}
+.btn-light:hover {
+    background-color: var(--clr-light) !important;
+    color: var(--clr-primary) !important;
+}
+
+/* =======================================
+   Background Image Layers
+   ======================================= */
+.hero-split {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1; /* Keeps images behind the content */
+}
+
+/* Mobile defaults to seeing only the right (leaf) background */
+.hero-left {
+    display: none;
+    background-color: #a3ab93;
+    left: 0;
+}
+
+.hero-right {
+    right: 0;
+    width: 100%;
+}
+
+.hero-img-left,
+.hero-img-right {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-img-left {
+    opacity: 0.9;
+}
+
+.hero-img-right {
+    opacity: 1;
+    
+}
+
+.hero-overlay-dark {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    
+}
+
+/* Bestseller Logo */
+.bestseller_logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px; /* Adds breathing room between the logo and the title */
+}
+
+.bestseller_logo img {
+    height: 45px; /* Adjust this number to make the logo larger or smaller */
+    width: auto;
+    object-fit: contain;
+    opacity: 0.8; /* Optional: Softens the black slightly to match the earthy vibe */
+}
+
+/* =======================================
+   Desktop Split View Media Query
+   ======================================= */
+@media (min-width: 1024px) {
+    .hero-left {
+        display: block;
+        width: 50vw;
+    }
+    .hero-right {
+        width: 50vw;
+    }
+}

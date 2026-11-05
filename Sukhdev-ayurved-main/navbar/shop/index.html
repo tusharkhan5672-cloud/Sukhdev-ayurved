@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | Sukhdev Ayurvedic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .nav-link.current { color: var(--clr-accent); }
+        .nav-links .nav-link .nav-arrow { display: none; }
+        @media (max-width: 1023px) {
+            .nav-links.open { display: flex; flex-direction: column; gap: 18px; position: fixed; top: var(--nav-height); left: 0; right: 0; padding: 24px 1.5rem; background: #fffcf6; box-shadow: 0 12px 24px rgba(0,0,0,.06); z-index: 999; }
+            .nav-links.open .nav-link { font-size: .95rem; font-weight: 700; display: flex; }
+        }
+        .shop-search { padding: 8px 12px; border: 1px solid #eaeaea; background: #fff; font-family: var(--font-body); font-size: .85rem; min-width: 180px; }
+        .toolbar-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .sd-product-card .sd-btn-cart:disabled { opacity: .5; cursor: not-allowed; background: #f4f4f4; }
+        .sd-price .old { text-decoration: line-through; color: #bbb; font-weight: 400; margin-right: 6px; }
+        .sd-flag { position: absolute; top: 10px; right: 10px; background: var(--clr-primary); color: #fff; font-size: .6rem; padding: 4px 8px; letter-spacing: 1px; z-index: 2; }
+        .shop-empty { grid-column: 1 / -1; text-align: center; padding: 60px 0; color: #888; }
+        .shop-empty a { color: var(--clr-primary); text-decoration: underline; cursor: pointer; }
+        .shop-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--clr-primary); color: #fff; padding: 12px 24px; font-size: .85rem; z-index: 2000; }
+        .sd-footer-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 16px; font-size: .8rem; letter-spacing: 1px; text-transform: uppercase; }
+        .sd-footer-links a:hover { color: var(--clr-primary); text-decoration: underline; }
+        .filter-clear { font-size: .8rem; color: var(--clr-primary); text-decoration: underline; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <nav class="nav-links" id="nav-links">
+                <a href="../../index.html" class="nav-link">Home</a>
+                <a href="index.html" class="nav-link current">Shop</a>
+                <a href="../../account.html" class="nav-link">My Orders</a>
+            </nav>
+
+            <a href="../../index.html" class="brand-logo-wrapper">
+                <img src="../../image/black logo.png" alt="Sukhdev Logo" class="logo">
+            </a>
+
+            <div class="nav-actions">
+                <span class="search-text">What are you looking for?</span>
+                <button class="icon-btn" id="search-btn" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <a href="../../login.html" id="acct-link" class="icon-btn" aria-label="Account">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                <a href="../../cart.html" class="icon-btn cart-btn" aria-label="Cart">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="sukhdev-main">
+
+        <section class="shop-hero">
+            <div class="shop-hero-split left-bg">
+                <img src="https://images.unsplash.com/photo-1596344084757-b83f2081da8b?q=80&w=1285&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Herbal Tea">
+            </div>
+            <div class="shop-hero-split right-bg">
+                <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Star Anise and Cinnamon">
+            </div>
+            <div class="shop-hero-overlay"></div>
+
+            <div class="shop-hero-content">
+                <p class="sd-subtitle text-light" data-site="heroSub">NATURE'S PURITY IN EVERY SIP</p>
+                <h1 class="sd-main-title text-light" data-site="heroTitle">Whole Body<br>Health starts in<br>the guts</h1>
+                <a href="#products-area" class="sd-btn-outline btn-light">SHOP ALL &mdash;</a>
+            </div>
+        </section>
+
+        <section id="products-area" class="shop-container">
+            <aside class="shop-sidebar">
+                <h3 class="filter-heading">Categories</h3>
+                <ul class="filter-list" id="cat-list"></ul>
+
+                <h3 class="filter-heading">Price</h3>
+                <ul class="filter-list" id="price-list">
+                    <li><label><input type="checkbox" data-min="0" data-max="499"> Under ₹ 500/-</label></li>
+                    <li><label><input type="checkbox" data-min="500" data-max="999"> ₹ 500/- &ndash; ₹ 999/-</label></li>
+                    <li><label><input type="checkbox" data-min="1000" data-max="999999"> ₹ 1000/- &amp; above</label></li>
+                </ul>
+                <a class="filter-clear" id="clear-filters">Clear all filters</a>
+            </aside>
+
+            <div class="shop-content">
+                <div class="shop-toolbar">
+                    <p class="product-count" id="product-count">Loading…</p>
+                    <div class="toolbar-right">
+                        <input type="search" class="shop-search" id="shop-search" placeholder="Search products">
+                        <select class="sort-dropdown" id="sort">
+                            <option value="featured">Sort by: Featured</option>
+                            <option value="low">Price: Low to High</option>
+                            <option value="high">Price: High to Low</option>
+                            <option value="new">New Arrivals</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sd-product-grid" id="shop-grid"></div>
+            </div>
+        </section>
+
+        <footer class="sd-footer">
+            <div class="sd-footer-links">
+                <a href="../../index.html">Home</a>
+                <a href="index.html">Shop</a>
+                <a href="../../cart.html">Cart</a>
+                <a href="../../account.html">My Orders</a>
+                <a href="../../login.html" id="foot-acct">Sign in</a>
+            </div>
+            <div class="sd-footer-bottom">
+                <p>&copy; 2026 Sukhdev. All rights reserved.</p>
+                <p class="sd-credit">Designed by <strong>TUSDIO.</strong></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>window.ROOT = '../../';</script>
+    <script src="../../store.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout | Sukhdev</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="store.css">
+</head><body>
+<header class="navbar"><div class="nav-container">
+ <a href="cart.html" class="nav-link">← Back to cart</a>
+ <a href="index.html" class="brand-logo-wrapper"><img src="image/black logo.png" class="logo" alt="Sukhdev"></a>
+ <div class="nav-actions"><button class="icon-btn" aria-label="Account"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
+ <span class="cart-badge" id="cart-count" style="position:static">0</span></div>
+</div></header>
+<main class="page" style="max-width:760px">
+ <h1>Checkout</h1>
+ <div class="box" id="sum"></div>
+ <div class="box" id="co">
+  <label>Full name</label><input id="n">
+  <label>Phone</label><input id="p" type="tel">
+  <label>Delivery address</label><textarea id="a" rows="3"></textarea>
+  <button class="btn" id="buy">Place Order (Cash on Delivery)</button>
+ </div>
+ <div class="box hide" id="done"></div>
+</main>
+<script src="store.js"></script>
+<script src="store-ext.js"></script>
+<script src="cart-system.js"></script>
+<script src="script.js"></script>
+<script>
+const S=Store,$=i=>document.getElementById(i),m=S.me();
+if(!m)location.replace('login.html?next=checkout.html');
+else{$('n').value=m.name;$('p').value=m.phone;$('a').value=m.address}
+function draw(){
+ const c=S.cart();
+ $('sum').innerHTML=c.length?`<table><tr><th>Item</th><th>Qty</th><th>Price</th></tr>${c.map(i=>`<tr><td>${S.esc(i.name)}</td><td>${i.qty}</td><td>${S.money(i.price*i.qty)}</td></tr>`).join('')}<tr><td></td><td><b>Total</b></td><td><b>${S.money(S.total())}</b></td></tr></table>`:'<p>Your cart is empty. <a href="navbar/shop/index.html"><u>Go to shop</u></a></p>';
+ $('co').classList.toggle('hide',!c.length);
+}
+$('buy').onclick=()=>{
+ const name=$('n').value.trim(),phone=$('p').value.trim(),address=$('a').value.trim();
+ if(!name||!phone||!address)return alert('Please fill all details');
+ const r=S.place({name,phone,address});
+ if(r.err)return alert(r.err);
+ const o=r.order;S.updateUser({address,phone});
+ const w=S.wa(o);draw();
+ document.querySelectorAll('.cart-badge').forEach(b=>b.style.display='none');
+ const d=$('done');d.classList.remove('hide');
+ d.innerHTML=`<h3>Thank you, ${S.esc(name)}!</h3><p>Your order <b>${o.id}</b> is placed. Total ${S.money(o.total)}.</p><p style="margin-top:12px"><a class="btn ghost" href="account.html">View my orders</a> ${w?`<a class="btn" href="${w}" target="_blank">Send on WhatsApp</a>`:''}</p>`;
+};
+draw();
+</script>
+</body></html>

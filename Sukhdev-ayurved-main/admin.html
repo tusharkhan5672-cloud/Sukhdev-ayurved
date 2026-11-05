@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | Sukhdev</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dash.css">
+</head><body>
+
+<div class="gate" id="gate">
+ <form class="gcard" id="lf" novalidate>
+  <a href="index.html" class="back">← Back to website</a>
+  <div class="mark">SUKHDEV</div>
+  <h1>Admin sign in</h1>
+  <label>Admin ID</label><input id="uid" autocomplete="username">
+  <label>Password</label><input id="upw" type="password" autocomplete="current-password">
+  <div class="err" id="lerr"></div>
+  <button type="submit" class="btn" style="width:100%">Sign in</button>
+ </form>
+</div>
+
+<div class="app hide" id="console">
+ <aside class="side">
+  <a href="index.html" class="brand">SUKHDEV<small>ADMIN</small></a>
+  <nav class="nav" id="nav"></nav>
+  <div class="nav foot" id="ft"></div>
+ </aside>
+ <main class="main">
+  <div class="top"><h2 id="ttl"></h2><div class="acts" id="tact"></div></div>
+  <div id="content"></div>
+ </main>
+</div>
+
+<div class="mb hide" id="mb"><div class="md" id="md"></div></div>
+
+<script src="store.js"></script>
+<script src="admin.js"></script>
+</body></html>

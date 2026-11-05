@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FAF8F3">
+  <title>Login | Sukhdev</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dash.css">
+
+  <style>
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    .art {
+      position: relative;
+      min-height: 100vh;
+      background: #a3ab93 url('image/joanna-stolowicz-QdX9Ds-WrCQ-unsplash.jpg') center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .art::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(20, 37, 25, .25),
+        rgba(20, 37, 25, .72)
+      );
+    }
+
+    .cap {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      height: 100%;
+      min-height: 100vh;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cap .mark {
+      color: #fff;
+      font-size: 1.3rem;
+    }
+
+    .cap h2 {
+      color: #fff;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      line-height: 1.15;
+      max-width: 480px;
+    }
+
+    .cap p {
+      opacity: .85;
+      margin-top: 14px;
+      font-size: .95rem;
+    }
+
+    .form {
+      display: grid;
+      place-items: center;
+      padding: 40px 24px;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 390px;
+    }
+
+    .box h1 {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .box > p {
+      color: var(--mu);
+      font-size: .88rem;
+      margin-bottom: 28px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 28px;
+      border-bottom: 1px solid var(--ln);
+      margin-bottom: 28px;
+    }
+
+    .tabs button {
+      padding: 0 0 12px;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--mu);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+
+    .tabs button.on {
+      color: var(--g);
+      border-bottom-color: var(--g);
+    }
+
+    .form-fields {
+      animation: appear .25s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .box input {
+      margin-bottom: 19px;
+    }
+
+    .box .btn {
+      min-height: 46px;
+    }
+
+    .home {
+      display: inline-block;
+      margin-top: 25px;
+      font-size: .78rem;
+      color: var(--mu);
+      transition: .2s;
+    }
+
+    .home:hover {
+      color: var(--g);
+    }
+
+    .err {
+      margin-top: 12px;
+      margin-bottom: 0;
+      line-height: 1.5;
+    }
+
+    .success {
+      color: #267044;
+      font-size: .8rem;
+      min-height: 20px;
+      margin-top: 12px;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 800px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .art {
+        display: none;
+      }
+
+      .form {
+        min-height: 100vh;
+        padding: 35px 22px;
+      }
+
+      .box {
+        max-width: 420px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .box h1 {
+        font-size: 1.8rem;
+      }
+
+      .tabs {
+        gap: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="split">
+
+    <!-- LEFT IMAGE SECTION -->
+    <section class="art">
+      <div class="cap">
+
+        <a href="index.html" class="mark">SUKHDEV</a>
+
+        <div>
+          <h2>Nature's purity<br>in every sip.</h2>
+          <p>Handcrafted Ayurvedic teas, delivered to your door.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RIGHT LOGIN SECTION -->
+    <main class="form">
+      <div class="box">
+
+        <h1 id="h">Welcome back</h1>
+
+        <p id="sub">
+          Sign in to track your orders and check out faster.
+        </p>
+
+        <!-- TABS -->
+        <div class="tabs">
+          <button type="button" class="on" id="t1">
+            Sign in
+          </button>
+
+          <button type="button" id="t2">
+            Create account
+          </button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="fl" class="form-fields">
+
+          <label for="le">Email or Admin ID</label>
+          <input
+            id="le"
+            type="text"
+            placeholder="Enter your email or admin ID"
+            autocomplete="username"
+            required
+          >
+
+          <label for="lp">Password</label>
+          <input
+            id="lp"
+            type="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+
+          <button class="btn" id="loginBtn" type="submit" style="width:100%">
+            Sign in
+          </button>
+
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="fr" class="form-fields hide">
+
+          <label for="rn">Full name</label>
+          <input
+            id="rn"
+            type="text"
+            placeholder="Your full name"
+            autocomplete="name"
+            required
+          >
+
+          <label for="re">Email address</label>
+          <input
+            id="re"
+            type="email"
+            placeholder="Your email address"
+            autocomplete="email"
+            required
+          >
+
+          <label for="rp">Phone number</label>
+          <input
+            id="rp"
+            type="tel"
+            placeholder="Your phone number"
+            autocomplete="tel"
+            required
+          >
+
+          <label for="rw">Password</label>
+          <input
+            id="rw"
+            type="password"
+            placeholder="Minimum 6 characters"
+            autocomplete="new-password"
+            minlength="6"
+            required
+          >
+
+          <button class="btn" id="registerBtn" type="submit" style="width:100%">
+            Create account
+          </button>
+
+        </form>
+
+        <!-- MESSAGES -->
+        <div class="err" id="err" role="alert" aria-live="polite"></div>
+
+        <a href="index.html" class="home">
+          ← Back to website
+        </a>
+
+      </div>
+    </main>
+
+  </div>
+
+<script src="store.js"></script>
+<script src="store-ext.js"></script>
+<script src="cart-system.js"></script>
+<script src="script.js"></script>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const $ = id => document.getElementById(id);
+
+      // Check Store.js
+      if (typeof Store === 'undefined') {
+        $('err').textContent =
+          'Unable to load the store. Please check your store.js file.';
+        $('loginBtn').disabled = true;
+        $('registerBtn').disabled = true;
+        return;
+      }
+
+      const S = Store;
+
+      // Only allow local relative redirect destinations.
+      const requestedNext =
+        new URLSearchParams(location.search).get('next');
+
+      const next = (
+        requestedNext &&
+        !requestedNext.startsWith('//') &&
+        !requestedNext.includes('\\') &&
+        !/^[a-z][a-z0-9+.-]*:/i.test(requestedNext) &&
+        !requestedNext.startsWith('/') &&
+        !requestedNext.startsWith('#')
+      ) ? requestedNext : 'account.html';
+
+      // Existing admin configuration for compatibility.
+      const AC = () => S.get('admin', {
+        id: 'kushagarwal',
+        pass: S.hash('Kush@2026')
+      });
+
+      let attempts = 0;
+      let lockUntil = 0;
+
+      const error = message => {
+        $('err').textContent = message;
+        $('err').className = 'err';
+      };
+
+      const clearError = () => error('');
+
+      // If customer is already logged in.
+      try {
+        if (S.me()) {
+          location.replace(next);
+          return;
+        }
+      } catch (e) {
+        console.error('Session check failed:', e);
+      }
+
+      // Switch between forms.
+      function tab(login) {
+
+        $('fl').classList.toggle('hide', !login);
+        $('fr').classList.toggle('hide', login);
+
+        $('t1').classList.toggle('on', login);
+        $('t2').classList.toggle('on', !login);
+
+        $('t1').setAttribute('aria-pressed', String(login));
+        $('t2').setAttribute('aria-pressed', String(!login));
+
+        $('h').textContent = login
+          ? 'Welcome back'
+          : 'Join Sukhdev';
+
+        $('sub').textContent = login
+          ? 'Sign in to track your orders and check out faster.'
+          : 'Create an account to order and track your teas.';
+
+        clearError();
+      }
+
+      $('t1').addEventListener('click', () => tab(true));
+      $('t2').addEventListener('click', () => tab(false));
+
+      // LOGIN
+      $('fl').addEventListener('submit', e => {
+
+        e.preventDefault();
+        clearError();
+
+        if (Date.now() < lockUntil) {
+          const seconds = Math.ceil(
+            (lockUntil - Date.now()) / 1000
+          );
+
+          return error(
+            `Too many attempts. Please wait ${seconds} seconds.`
+          );
+        }
+
+        const id = $('le').value.trim();
+        const password = $('lp').value;
+
+        if (!id || !password) {
+          return error('Please enter your login details.');
+        }
+
+        try {
+
+          const admin = AC();
+
+          // Admin login.
+          if (
+            id.toLowerCase() === String(admin.id).toLowerCase()
+          ) {
+
+            if (S.hash(password) === admin.pass) {
+
+              sessionStorage.setItem('sd_admin', '1');
+
+              attempts = 0;
+
+              $('lp').value = '';
+
+              location.replace('admin.html');
+
+              return;
+
+            }
+
+            failedLogin();
+            return error('Wrong Admin ID or password.');
+          }
+
+          // Customer login.
+          const result = S.login(id, password);
+
+          if (result) {
+
+            attempts = 0;
+
+            location.replace(next);
+
+          } else {
+
+            failedLogin();
+            error('Wrong email or password.');
+
+          }
+
+        } catch (err) {
+
+          console.error('Login error:', err);
+          error('Something went wrong. Please try again.');
+
+        }
+
+      });
+
+      function failedLogin() {
+
+        attempts++;
+
+        if (attempts >= 5) {
+
+          lockUntil = Date.now() + 30000;
+          attempts = 0;
+
+          error('Too many attempts. Please wait 30 seconds.');
+
+        }
+
+      }
+
+      // REGISTER
+      $('fr').addEventListener('submit', e => {
+
+        e.preventDefault();
+        clearError();
+
+        const data = {
+          name: $('rn').value.trim(),
+          email: $('re').value.trim(),
+          phone: $('rp').value.trim(),
+          password: $('rw').value
+        };
+
+        if (!data.name || !data.email || !data.phone || !data.password) {
+          return error('Please fill in all fields.');
+        }
+
+        if (data.password.length < 6) {
+          return error('Password must be at least 6 characters.');
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+          return error('Please enter a valid email address.');
+        }
+
+        try {
+
+          const result = S.register(data);
+
+          if (result) {
+
+            error(
+              typeof result === 'string'
+                ? result
+                : 'Unable to create your account. Please try again.'
+            );
+
+          } else {
+
+            location.replace(next);
+
+          }
+
+        } catch (err) {
+
+          console.error('Registration error:', err);
+          error('Registration failed. Please try again.');
+
+        }
+
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
