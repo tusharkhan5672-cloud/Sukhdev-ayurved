@@ -33,12 +33,12 @@
             </button>
 
             <nav class="nav-links" id="nav-links" aria-label="Main">
-                <a href="../../index.html" class="nav-link">Home</a>
-                <a href="index.html" class="nav-link current" aria-current="page">Shop</a>
-                <a href="../../account.html" class="nav-link">My Orders</a>
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../index.html" class="nav-link current" aria-current="page">Shop</a>
+                <a href="../account.html" class="nav-link">My Orders</a>
             </nav>
 
-            <a href="../../index.html" class="brand-logo-wrapper" aria-label="Sukhdev home">
+            <a href="../index.html" class="brand-logo-wrapper" aria-label="Sukhdev home">
                 <img src="black-logo.png" alt="Sukhdev" class="logo">
             </a>
 
@@ -50,13 +50,13 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                 </a>
-                <a href="../../login.html" id="acct-link" class="icon-btn" aria-label="Sign in" title="Sign in">
+                <a href="../login.html" id="acct-link" class="icon-btn" aria-label="Sign in" title="Sign in">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </a>
-                <a href="../../cart.html" class="icon-btn cart-btn" aria-label="Cart">
+                <a href="../cart.html" class="icon-btn cart-btn" aria-label="Cart">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                     <span class="cart-badge" id="cart-count" hidden>0</span>
                 </a>
@@ -68,7 +68,7 @@
 
         <!-- Breadcrumbs -->
         <nav class="breadcrumbs-container" aria-label="Breadcrumb">
-            <a href="../../index.html">Home</a> <span class="separator">/</span>
+            <a href="../index.html">Home</a> <span class="separator">/</span>
             <a href="index.html">Shop</a> <span class="separator">/</span>
             <span class="current" aria-current="page">Herbal Wellness Tea</span>
         </nav>
@@ -246,15 +246,15 @@
 
     <!-- Account icon follows the Firebase sign-in state -->
     <script type="module">
-      import('../../firebase.js').then(({ SDAuth }) => {
+      import('../firebase.js').then(({ SDAuth }) => {
         const acct = document.getElementById('acct-link');
         SDAuth.onChange(user => {
           if (user) {
-            acct.href = SDAuth.roleOf(user) ? '../../admin.html' : '../../account.html';
+            acct.href = SDAuth.roleOf(user) ? '../admin.html' : '../account.html';
             acct.setAttribute('aria-label', 'My account');
             acct.title = 'My account';
           } else {
-            acct.href = '../../login.html';
+            acct.href = '../login.html';
             acct.setAttribute('aria-label', 'Sign in');
             acct.title = 'Sign in';
           }
